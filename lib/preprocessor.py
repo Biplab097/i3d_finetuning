@@ -68,6 +68,27 @@ def loaddata(Video_dir,n_classes):
 
     return np.array(X) , np.array(labels)
 
+T = 16
+
+def trim(video):
+    start = np.random.randint(0, video.shape[0] - (T+1)) #changed shape[1] to shape[0]
+    end = start + T
+    print("Start and end ",start,end)
+    return np.array(video[start:end, :, :, :])
+
+
+def train_array(X_train):
+    X = []
+    for ele in X_train:
+#         print("shape",ele.shape)
+        ele = trim(ele)
+        X.append(ele)
+        print("shape",ele.shape)
+    print("from train array",len(X))
+    
+    return np.array(X)
+    
+
 
     
     
