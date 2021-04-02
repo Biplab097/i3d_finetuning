@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 from keras.optimizers import SGD # optimizer
 
 def train_i3d(X_train,Y_train,X_test,Y_test):
+    tf.keras.backend.set_floatx('float32')
     i3d = "https://tfhub.dev/deepmind/i3d-kinetics-400/1"
 #     train_data = tf.data.Dataset.from_tensor_slices((X_train,Y_train))
 #     test_data = tf.data.Dataset.from_tensor_slices((X_test,Y_test))
@@ -35,8 +36,8 @@ def train_i3d(X_train,Y_train,X_test,Y_test):
     model.add(hub_layer)
     model.add(tf.keras.layers.Dense(256,activation='relu'))
     model.add(tf.keras.layers.Dense(9, activation='softmax'))
-    model.summary()
-    opt = SGD(learning_rate=(0.00002)) # 2*10^-5
+#     model.summary()
+    opt = SGD(learning_rate=(0.002)) # 2*10^-3
     model.compile(loss='categorical_crossentropy',optimizer=opt, metrics=['accuracy'])
     print("here1------>",type(X_train))
 #     X_train = tf.convert_to_tensor(X_train,dtype=tf.float32)
