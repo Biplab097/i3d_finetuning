@@ -23,6 +23,8 @@ from sklearn.model_selection import train_test_split
 from IPython import display
 import matplotlib.pyplot as plt
 from keras.optimizers import SGD # optimizer
+from keras.regularizers import l2
+from keras.layers import Dropout
 
 def train_i3d(X_train,Y_train,X_test,Y_test):
     tf.keras.backend.set_floatx('float32')
@@ -35,9 +37,12 @@ def train_i3d(X_train,Y_train,X_test,Y_test):
     print("Here ------> ",type(model))
     model.add(hub_layer)
     model.add(tf.keras.layers.Dense(256,activation='relu'))
-    model.add(tf.keras.layers.Dense(9, activation='softmax'))
+    model.add(Dropout(0.25))
+    # added dropout on 05-04-2021
+    model.add(tf.keras.layers.Dense(9, activation='softmax', kernel_regularizer=l2(0.001), bias_regularizer=l2(0.001)))
+    # added kernel_regularizer on date 05-04-2021
 #     model.summary()
-    opt = SGD(learning_rate=(0.002)) # 2*10^-3
+    opt = SGD(learning_rate=(0.0002)) # 2*10^-4
     model.compile(loss='categorical_crossentropy',optimizer=opt, metrics=['accuracy'])
     print("here1------>",type(X_train))
 #     X_train = tf.convert_to_tensor(X_train,dtype=tf.float32)
